@@ -182,4 +182,18 @@ const router = createRouter({
     ]
 });
 
+const publicRoutes = ['login', 'forgot-password', 'change-password-token', 'error', 'accessDenied', 'notfound']
+
+router.beforeEach((to, from, next) => {
+    const accessToken = localStorage.getItem('accessToken')
+
+    if (!accessToken && !publicRoutes.includes(to.name)) {
+        next('/auth/login')
+    } else if(accessToken && publicRoutes.includes(to.name)) {
+        next('/')
+    } else {
+        next()
+    }
+})
+
 export default router;

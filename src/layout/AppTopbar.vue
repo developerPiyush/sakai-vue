@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
+import Menu from 'primevue/menu';
 
 const { layoutConfig, onMenuToggle } = useLayout();
 
@@ -20,6 +21,32 @@ onBeforeUnmount(() => {
 const logoUrl = computed(() => {
     return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
+
+const logout = () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('userData');
+
+  router.replace('/login')
+}
+
+const profileMenu = ref();
+const profileMenuItems = ref([
+    {
+        label: 'Profile',
+        items: [
+            {
+                label: 'Logout',
+                icon: 'pi pi-power-off',
+                command: logout,
+            }
+        ]
+    }
+]);
+const toggle = (event) => {
+    profileMenu.value.toggle(event);
+};
+
+
 
 const onTopBarMenuButton = () => {
     topbarMenuActive.value = !topbarMenuActive.value;
@@ -76,18 +103,11 @@ const isOutsideClicked = (event) => {
         </button>
 
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
-                <i class="pi pi-calendar"></i>
-                <span>Calendar</span>
-            </button>
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
+            <button class="p-link layout-topbar-button" @click="toggle" aria-haspopup="true" aria-controls="profile_menu">
                 <i class="pi pi-user"></i>
                 <span>Profile</span>
             </button>
-            <button @click="onSettingsClick()" class="p-link layout-topbar-button">
-                <i class="pi pi-cog"></i>
-                <span>Settings</span>
-            </button>
+            <Menu :model="profileMenuItems" ref="profileMenu" id="profile_menu" :popup="true" />
         </div>
     </div>
 </template>

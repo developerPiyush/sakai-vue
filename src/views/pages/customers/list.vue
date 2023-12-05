@@ -22,9 +22,9 @@ onBeforeMount(() => {
 const initFilters1 = () => {
     filters1.value = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        company_name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        companyName: { value: null, matchMode: FilterMatchMode.CONTAINS },
         date: { value: null, matchMode: FilterMatchMode.DATE_IS },
-        customer_type: { value: null, matchMode: FilterMatchMode.IN },
+        customerType: { value: null, matchMode: FilterMatchMode.IN },
     };
 };
 
@@ -62,7 +62,7 @@ const formatDate = (value) => {
                     :loading="loading1"
                     :filters="filters1"
                     responsiveLayout="scroll"
-                    :globalFilterFields="['company_name', 'key_person', 'contact', 'email', 'reference']"
+                    :globalFilterFields="['companyName', 'keyPerson', 'contact', 'email', 'reference']"
                 >
                     <template #header>
                         <div class="flex justify-content-between flex-column sm:flex-row">
@@ -78,18 +78,18 @@ const formatDate = (value) => {
                     </template>
                     <template #empty> No customers found. </template>
                     <template #loading> Loading customers data. Please wait. </template>
-                    <Column field="company_name" header="Company name" style="min-width: 12rem" :showFilterMatchModes="false" >
+                    <Column field="companyName" header="Company name" style="min-width: 12rem" :showFilterMatchModes="false" >
                         <template #body="{ data }">
-                            {{ data.company_name }}
+                            {{ data.companyName }}
                         </template>
                         <template #filter="{ filterModel }">
                             <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name" />
                         </template>
                     </Column>
-                    <Column header="Key person" filterField="key_person" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
+                    <Column header="Key person" filterField="keyPerson" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
                         <template #body="{ data }">
                             
-                            <span style="margin-left: 0.5em; vertical-align: middle" class="image-text">{{ data.key_person }}</span>
+                            <span style="margin-left: 0.5em; vertical-align: middle" class="image-text">{{ data.keyPerson }}</span>
                         </template>
                     </Column>
                     <Column header="Contact no." filterField="contact" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
@@ -107,9 +107,9 @@ const formatDate = (value) => {
                             <span style="margin-left: 0.5em; vertical-align: middle" class="image-text">{{ data.address }}</span>
                         </template>
                     </Column>
-                    <Column field="customer_type" header="Customer type" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
+                    <Column field="customerType" header="Customer type" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 12rem">
                         <template #body="{ data }">
-                            <span :class="'customer-badge status-' + data.status">{{ data.customer_type }}</span>
+                            <span :class="'customer-badge status-' + data.status">{{ data.customerType }}</span>
                         </template>
                         <template #filter="{ filterModel }">
                             <Dropdown v-model="filterModel.value" :options="statuses" placeholder="Any" class="p-column-filter" :showClear="true">
@@ -123,19 +123,19 @@ const formatDate = (value) => {
                             </Dropdown>
                         </template>
                     </Column>
-                    <Column header="Product type" filterField="product_type" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
+                    <Column header="Product type" filterField="productType" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
                         <template #body="{ data }">
-                            <span style="margin-left: 0.5em; vertical-align: middle" class="image-text">{{ data.product_type }}</span>
+                            <span style="margin-left: 0.5em; vertical-align: middle" class="image-text">{{ data.productType }}</span>
                         </template>
                     </Column>
-                    <Column header="Purchase plan" filterField="purchase_plan" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
+                    <Column header="Purchase plan" filterField="purchasePlan" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
                         <template #body="{ data }">
-                            <span style="margin-left: 0.5em; vertical-align: middle" class="image-text">{{ data.purchase_plan }}</span>
+                            <span style="margin-left: 0.5em; vertical-align: middle" class="image-text">{{ data.purchasePlan }}</span>
                         </template>
                     </Column>
-                    <Column header="Suggested model" filterField="suggested_model" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
+                    <Column header="Suggested model" filterField="suggestedModel" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
                         <template #body="{ data }">
-                            <span style="margin-left: 0.5em; vertical-align: middle" class="image-text">{{ data.suggested_model }}</span>
+                            <span style="margin-left: 0.5em; vertical-align: middle" class="image-text">{{ data.suggestedModel }}</span>
                         </template>
                     </Column>
                     <Column header="Reference" filterField="reference" :showFilterMatchModes="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 14rem">
