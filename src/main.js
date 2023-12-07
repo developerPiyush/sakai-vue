@@ -99,6 +99,9 @@ import TreeSelect from 'primevue/treeselect';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
+import store from './store'
+import { abilitiesPlugin } from '@casl/vue';
+import ability from './services/ability';
 
 import BlockViewer from '@/components/BlockViewer.vue';
 
@@ -111,6 +114,11 @@ app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
+app.use(abilitiesPlugin, ability, {
+    useGlobalProperties: true
+  });
+app.use(store);
+
 
 app.directive('tooltip', Tooltip);
 app.directive('badge', BadgeDirective);

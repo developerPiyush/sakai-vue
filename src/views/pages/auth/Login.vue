@@ -1,47 +1,19 @@
 <script setup>
-import axios from '@axios'
 import { useLayout } from '@/layout/composables/layout';
 import { ref, computed } from 'vue';
-import AppConfig from '@/layout/AppConfig.vue';
-import { useRoute, useRouter } from 'vue-router';
-
-
-const route = useRoute()
-const router = useRouter()
 const { layoutConfig } = useLayout();
 const email = ref('');
-const password = ref('');
 const checked = ref(false);
 const submitted = ref(false);
+import useAuth from '../../../composables/auth'
+
+const { loginForm, submitLogin } = useAuth();
 
 const logoUrl = computed(() => {
     return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
 });
 
-const login = () => {
-    submitted.value = true;
-    if (email.value && email.value.trim() && password.value) {
-        axios.post('/auth/login', {
-            email: email.value,
-            password: password.value,
-        }).then(r => {
-            const { accessToken, userData, userAbilities } = r.data
 
-            // localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
-            // ability.update(userAbilities)
-            localStorage.setItem('userData', JSON.stringify(userData))
-            localStorage.setItem('accessToken', JSON.stringify(accessToken))
-
-            // Redirect to `to` query if exist or redirect to index route
-            router.replace(route.query.to ? String(route.query.to) : '/')
-        }).catch(e => {
-            const { errors: formErrors } = e.response.data
-
-            errors.value = formErrors
-            console.error(e.response.data)
-        })
-    }
-}
 </script>
 
 <template>
@@ -59,14 +31,14 @@ const login = () => {
                     <div>
                         <div class="field col-12 md:col-12 md:w-30rem">
                             <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
-                            <InputText id="email1" type="text" placeholder="Email address" class="w-full" :class="{ 'p-invalid': submitted && !email }" style="padding: 1rem" v-model="email" />
-                            <small class="p-invalid" v-if="submitted && !email">Email is required.</small>
+                            <InputText id="email1" type="text" placeholder="Email address" class="w-full" :class="{ 'p-invalid': submitted && !email }" style="padding: 1rem" v-model="loginForm.email" />
+                            <small class="p-invalid" v-if="submitted && !loginForm.email">Email is required.</small>
                         </div>
 
                         <div class="field col-12 md:col-12">
                             <label for="password" class="block text-900 font-medium text-xl mb-2">Password</label>
-                            <Password id="password" v-model="password" placeholder="Password" :toggleMask="true" class="w-full" :class="{ 'p-invalid': submitted && !password }" inputClass="w-full" :inputStyle="{ padding: '1rem' }"></Password>
-                            <small class="p-invalid" v-if="submitted && !password">Password is required.</small>
+                            <Password id="password" v-model="loginForm.password" placeholder="Password" :toggleMask="true" class="w-full" :class="{ 'p-invalid': submitted && !loginForm.password }" inputClass="w-full" :inputStyle="{ padding: '1rem' }"></Password>
+                            <small class="p-invalid" v-if="submitted && !loginForm.password">Password is required.</small>
                         </div>
 
                         <div class="flex align-items-center justify-content-between mb-5 gap-5">
@@ -76,7 +48,7 @@ const login = () => {
                             </div>
                             <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
                         </div>
-                        <Button label="Sign In" class="w-full p-3 text-xl" @click="login"></Button>
+                        <Button label="Sign In" class="w-full p-3 text-xl" @click="submitLogin"></Button>
                     </div>
                 </div>
             </div>

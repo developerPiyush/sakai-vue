@@ -33,7 +33,20 @@ const router = createRouter({
                     name: 'permissions_list',
                     component: () => import('@/views/pages/authorization/permissions/list.vue')
                 },
-            
+                {
+                    path: '/users/list',
+                    name: 'users_list',
+                    component: () => import('@/views/pages/authorization/users/list.vue')
+                },
+                {
+                    path: '/users/add',
+                    name: 'users_add',
+                    component: () => import('@/views/pages/authorization/users/add.vue')
+                },
+                {
+                    path: '/users/edit/:id',
+                    component: () => import('@/views/pages/authorization/users/edit.vue')
+                }
             ]
         },
         {
@@ -65,18 +78,18 @@ const router = createRouter({
     ]
 });
 
-const publicRoutes = ['login', 'forgot-password', 'change-password-token', 'error', 'accessDenied', 'notfound']
+const publicRoutes = ['login', 'forgot-password', 'change-password-token', 'error', 'accessDenied', 'notfound'];
 
 router.beforeEach((to, from, next) => {
-    const accessToken = localStorage.getItem('accessToken')
+    const accessToken = localStorage.getItem('accessToken');
 
     if (!accessToken && !publicRoutes.includes(to.name)) {
-        next('/auth/login')
-    } else if(accessToken && publicRoutes.includes(to.name)) {
-        next('/')
+        next('/auth/login');
+    } else if (accessToken && publicRoutes.includes(to.name)) {
+        next('/');
     } else {
-        next()
+        next();
     }
-})
+});
 
 export default router;

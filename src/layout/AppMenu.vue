@@ -24,6 +24,11 @@ const model = ref([
                 icon: 'pi pi-fw pi-pencil',
                 to: '/permissions/list'
             },
+            {
+                label: 'Users',
+                icon: 'pi pi-fw pi-user',
+                to: '/Users/list'
+            },
         ]
     }
 ]);
