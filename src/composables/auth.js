@@ -1,8 +1,7 @@
 import { ref, reactive, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { AbilityBuilder, Ability } from '@casl/ability';
-import { defineAbility } from '@casl/ability';
-import { provideAbility } from '@casl/vue';
+import { AbilityBuilder, createMongoAbility } from '@casl/ability';
+import { ABILITY_TOKEN } from '@casl/vue';
 
 import store from '../store';
 import axiosIns from '../service/axios';
@@ -15,6 +14,7 @@ let user = reactive({
 export default function useAuth() {
     const processing = ref(false);
     const router = useRouter();
+    const ability = inject(ABILITY_TOKEN)
 
     const loginForm = reactive({
         email: '',
@@ -25,29 +25,15 @@ export default function useAuth() {
     const submitLogin = async () => {
         try {
             const response = await axiosIns.post('/login', loginForm);
-
+            
             // Extract the accessToken from the response
             const accessToken = response.data.accessToken;
-            const permissions = response.data.userAbilities;
 
-            // Define abilities based on the permissions
-            const { can, rules } = new AbilityBuilder(defineAbility);
-            permissions.forEach((permission) => {
-                can(permission, 'all'); 
-            });
-    
-            const ability = new Ability(rules);
-
-            console.log('All Abilities:', rules);
-
+         
             // Save the accessToken and abilities in localStorage
             localStorage.setItem('accessToken', JSON.stringify(accessToken));
-            localStorage.setItem('abilities', JSON.stringify(rules));
 
-            console.log(ability);
-            // Provide the ability to the Vue app
-            provideAbility(ability);
-
+         
             // Dispatch actions, perform additional tasks as needed
             await store.dispatch('auth/getUser');
             await loginUser();
@@ -61,6 +47,8 @@ export default function useAuth() {
 
     const loginUser = () => {
         user = store.state.auth.user;
+        getAbilities()
+
     };
 
     const getUser = async () => {
@@ -89,11 +77,24 @@ export default function useAuth() {
             .finally(() => {});
     };
 
+    const getAbilities = async() => {
+        await axiosIns.get('/abilities')
+            .then(response => {
+                const permissions = response.data
+                const { can, rules } = new AbilityBuilder(createMongoAbility)
+
+                can(permissions)
+
+                ability.update(rules)
+            })
+    }
+
     return {
         loginForm,
         submitLogin,
         user,
         getUser,
-        logout
+        logout,
+        getAbilities
     };
 }

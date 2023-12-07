@@ -9,7 +9,7 @@ const user = ref({
     name: '',
     email: '',
     password: '',
-    role_id: null, 
+    role_id: null,
 });
 const roles = ref([]);
 const submitted = ref(false);
@@ -24,7 +24,7 @@ const saveUser = async () => {
     submitted.value = true;
     if (validateForm()) {
         try {
-           
+
             await axiosIns.post('/users', user.value);
             toast.add({ severity: 'success', summary: 'Successful', detail: 'User Created', life: 6000 });
             router.push("/users/list")
@@ -47,6 +47,7 @@ onMounted(async () => {
 </script>
 
 <template>
+    <Toast />
     <div class="grid">
         <div class="col-12">
             <div class="card">

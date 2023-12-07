@@ -114,9 +114,8 @@ app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
-app.use(abilitiesPlugin, ability, {
-    useGlobalProperties: true
-  });
+app.use(abilitiesPlugin, ability)
+
 app.use(store);
 
 

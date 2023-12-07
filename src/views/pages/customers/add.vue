@@ -1,42 +1,63 @@
 <script setup>
-import { ref, onMounted, onBeforeMount } from 'vue';
-import { useToast } from 'primevue/usetoast';
-import CustomerService from '@/service/CustomerService';
-
+import { ref } from 'vue';
+import { useToast } from "primevue/usetoast";
 const toast = useToast();
 
-const customers = ref(null);
-const customer = ref({});
-const submitted = ref(false);
-
-const customerService = new CustomerService();
-
-onMounted(() => {
-    customerService.getCustomersList().then((data) => (customers.value = data));
+const customer = ref({
+    companyName: '',
+    keyPerson: '',
+    contactNo: '',
+    email: '',
+    address: '',
+    customerType: '',
+    productType: '',
+    purchasePlan: '',
+    suggestedModel: '',
+    date: null,
+    reference: ''
 });
 
-const saveCustomer = () => {
-    submitted.value = true;
-    if (customer.value.companyName && customer.value.companyName.trim() && customer.value.contactNo) {
+const submitted = ref(false);
 
-        customer.value.id = createId();
-        customers.value.push(customer.value);
-        toast.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-        customer.value = {};
+const validateForm = () => {
+    return (
+        customer.value.companyName &&
+        customer.value.keyPerson &&
+        customer.value.contactNo &&
+        customer.value.email &&
+        customer.value.address &&
+        customer.value.customerType &&
+        customer.value.productType &&
+        customer.value.purchasePlan &&
+        customer.value.suggestedModel &&
+        customer.value.date &&
+        customer.value.reference
+    );
+};
+
+
+const saveCustomer = async () => {
+    try {
+        // Assuming you have the necessary data for creating a customer in a variable named 'customerData'
+        if (validateForm()) {
+            await axiosIns.post('/customers', customer);
+            toast.add({ severity: 'success', summary: 'Successful', detail: 'Customer Created', life: 3000 });
+        } else {
+            // Handle the case when the form is not valid
+            toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid form data', life: 3000 });
+        }
+    } catch (error) {
+        console.error('Error creating customer:', error);
     }
 };
 
-const createId = () => {
-    let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-        id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-};
+
+
 </script>
 
 <template>
+    <Toast />
+
     <div class="grid">
         <div class="col-12">
             <div class="card">
@@ -44,7 +65,8 @@ const createId = () => {
                 <div class="p-fluid formgrid grid">
                     <div class="field col-12 md:col-6">
                         <label for="companyName">Company Name</label>
-                        <InputText id="companyName" type="text" name="companyName" v-model.trim="customer.companyName" required="true" autofocus :class="{ 'p-invalid': submitted && !customer.companyName }" />
+                        <InputText id="companyName" type="text" name="companyName" v-model.trim="customer.companyName"
+                            required="true" autofocus :class="{ 'p-invalid': submitted && !customer.companyName }" />
                         <small class="p-invalid" v-if="submitted && !customer.companyName">Company Name is required.</small>
                     </div>
                     <div class="field col-12 md:col-6">
@@ -53,7 +75,8 @@ const createId = () => {
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="contactNo">Contact No.</label>
-                        <InputText id="contactNo" type="tel" name="contactNo" v-model.trim="customer.contactNo" required="true" :class="{ 'p-invalid': submitted && !customer.contactNo }" />
+                        <InputText id="contactNo" type="tel" name="contactNo" v-model.trim="customer.contactNo"
+                            required="true" :class="{ 'p-invalid': submitted && !customer.contactNo }" />
                         <small class="p-invalid" v-if="submitted && !customer.contactNo">Company Name is required.</small>
                     </div>
                     <div class="field col-12 md:col-6">
@@ -70,7 +93,7 @@ const createId = () => {
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="productType">Product type</label>
-                        <InputText id="productType" type="text" name="productType" v-model.trim="customer.productType"/>
+                        <InputText id="productType" type="text" name="productType" v-model.trim="customer.productType" />
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="purchasePlan">M/C Purchase Plan</label>
@@ -78,7 +101,8 @@ const createId = () => {
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="suggestedModel">Suggested Model</label>
-                        <InputText id="suggestedModel" type="text" name="suggestedModel" v-model.trim="customer.suggestedModel" />
+                        <InputText id="suggestedModel" type="text" name="suggestedModel"
+                            v-model.trim="customer.suggestedModel" />
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="date">Date</label>
@@ -91,7 +115,7 @@ const createId = () => {
                     <div class="field col-12 md:col-6"></div>
                     <div class="field col-12 md:col-2"></div>
                     <div class="field col-12 md:col-2">
-                        <Button  label="Reset" class="p-button-secondary mr-2 mb-2" />
+                        <Button label="Reset" class="p-button-secondary mr-2 mb-2" />
                     </div>
                     <div class="field col-12 md:col-2">
                         <Button label="Submit" class="mr-2 mb-2" @click="saveCustomer" />

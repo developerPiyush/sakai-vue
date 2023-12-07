@@ -88,7 +88,7 @@ function moveRight() {
 .container {
     display: flex;
     justify-content: space-around;
-    align-items: flex-start;
+    align-items: stretch; /* Updated alignment for better consistency */
 }
 
 .panel {
@@ -96,16 +96,19 @@ function moveRight() {
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    background-color: #fff; /* Added a background color for consistency */
 }
 
 .panel h2 {
     font-size: 1.5rem;
     margin-bottom: 10px;
+    color: #333; /* Adjusted text color for better readability */
 }
 
 .form-select {
     height: 200px;
     width: 100%;
+    border: 1px solid #ccc; /* Added border for a cleaner look */
 }
 
 .middle {
@@ -124,10 +127,25 @@ function moveRight() {
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin-top: 90px;
+    margin-top: 15px; /* Adjusted margin for better spacing */
+}
+
+.btn i {
+    margin-right: 5px; /* Added margin to create space between icon and text */
 }
 
 .btn:hover {
     background-color: #2980b9;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack panels vertically on smaller screens */
+    }
+
+    .panel,
+    .middle {
+        margin-bottom: 15px; /* Added margin between panels and buttons on smaller screens */
+    }
 }
 </style>

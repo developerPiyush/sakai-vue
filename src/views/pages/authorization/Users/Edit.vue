@@ -1,13 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axiosIns from '../../../../service/axios';
-import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 const router = useRouter()
 
 const user = ref({});
 const roles_items = ref([]);
 const submitted = ref(false);
+import { useToast } from 'primevue/usetoast';
 const toast = useToast();
 
 const validateForm = () => {
@@ -74,6 +74,7 @@ onMounted(async () => {
 </script>
 
 <template>
+     <Toast />
     <div class="grid">
         <div class="col-12">
             <div class="card">
